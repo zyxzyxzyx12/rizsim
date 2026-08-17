@@ -13,14 +13,7 @@ rizsim律动空间-一款rizline html模拟器
 - **全屏判定**：点击屏幕任意位置（包括画面边缘）均可判定，无需精确对准音符
 - 纯静态 HTML，直接打开即用（演示谱面已移除，请导入自己的谱面包）
 
-## 文件
 
-| 文件 | 说明 |
-|---|---|
-| `index.html` | 模拟器本体（单文件） |
-| `example-pack.zip` | 示例谱面包（演示谱面 + 合成 WAV + 生成曲绘），可直接导入体验 |
-| `make_example_pack.js` | 示例包生成脚本（`node make_example_pack.js`） |
-| `.research/` | 开发用研究资料与 node 测试（`test_core.js` 核心逻辑、`test_app.js` 端到端） |
 
 ## 使用方法
 
@@ -78,31 +71,8 @@ rizsim律动空间-一款rizline html模拟器
 坐标模型：虚拟画布 540×960，判线 y=720；米→像素换算采用社区实测公式
 `960 × (215/32 + 流速) × 10/129`。
 
-## 玩法还原（依据官方还原引擎实测数据）
 
-- **判定窗口**（IN 难度实测值）：
-  - Tap / Hold 头：Perfect ±90ms；Bad 90~125ms；**窗口外按下忽略**（不会误判 Bad）
-  - Riztime 内：Perfect ±50ms；Early/Late 50~110ms；早侧 Bad 110~125ms
-  - Drag：只有 Perfect/Miss（±90ms / Riztime ±50ms），不占用手指，任意按着的手指可命中
-  - **同拍 Tap+Drag 一次按下双判定**（官方行为）
-- **Hold 尾**：按到结尾自动 Perfect；提前松手只变暗并丢第二次 Hit（无判定、不 Miss、不断连击、不扣血）
-- **计分**：`得分 = round(Hits/MaxHits×1,000,000) + Riztime内Perfect数×100`
-- **达成率**：`= ComboPoints/MaxCombo + RiztimeHits/MaxRiztimeHits×0.2`（官方 120% 制；ComboPoints 按官方规则累加每次连击增量，满连时恰好等于 MaxCombo，miss 少量时达成率依然很高）
-- **连击**：1,2,3,4,5,7,9,11,14,17,20… 每次 +4（倍率随连击增长），Bad/Miss 断连击
-- **血量**：满血 100，Miss -12 / Bad -5，Riztime 内命中回血，归零即 FAILED
-- 判定偏移 / 音乐偏移 / 流速 / 音量 均可调节（滑块或**点击数字直接输入**；流速为官方 1~10，默认 3；设置会保存到 localStorage）
-- Tap 与 Catch 使用不同的打击音效（Tap 清脆高频 + 噪声 click，更响亮）
 
-## 测试
-
-```bash
-node .research/test_core.js   # 核心逻辑：ZIP 解析 / 时间轴 / 坐标 / 判定窗口 / 计分 / 多段Riztime / 性能
-node .research/test_app.js    # 端到端：导入→选曲→自动打歌/手动触摸→结算（含 DOM 桩）
-```
-
-测试使用真实谱面数据（927 线、1349 音符的官方曲谱）验证坐标模型，端到端覆盖：自动打歌全谱 ALL PERFECT、
-手动触摸全谱（双押 / 长按 / 早按 Bad）、Hold 无尾判（提前松手丢尾不 Miss、按到结尾自动 Perfect）、
-Hold 内 Drag 由按住的手指自动命中、同拍 Tap+Drag 一指双判、窗口外早按忽略。
 
 ## 参考资料
 
